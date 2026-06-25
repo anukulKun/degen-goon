@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>degen-goon · wallet roaster</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0f;
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      max-width: 560px;
+      width: 100%;
+      padding: 2rem;
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #f97316, #ef4444);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.25rem;
+    }
+    .sub { color: #71717a; margin-bottom: 2rem; }
+    .card {
+      background: #14141a;
+      border: 1px solid #27272a;
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+    label { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem; color: #a1a1aa; }
+    input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #3f3f46;
+      border-radius: 10px;
+      background: #1a1a22;
+      color: #e0e0e0;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border 0.2s;
+    }
+    input:focus { border-color: #f97316; }
+    button {
+      width: 100%;
+      margin-top: 1rem;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #f97316, #ef4444);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    button:hover { opacity: 0.85; }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
+    .result {
+      margin-top: 1.5rem;
+      padding: 1.25rem;
+      border-radius: 12px;
+      background: #1c1c24;
+      border-left: 4px solid #f97316;
+      display: none;
+      word-break: break-word;
+    }
+    .result.visible { display: block; }
+    .result .addr { font-size: 0.75rem; color: #71717a; margin-top: 0.75rem; }
+    .error { border-left-color: #ef4444; color: #f87171; }
+    .spinner {
+      display: inline-block;
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>degen-goon</h1>
+    <p class="sub">submit a wallet. get roasted.</p>
+
+    <div class="card">
+      <label for="address">Ethereum address</label>
+      <input id="address" type="text" placeholder="0x..." autocomplete="off" />
+      <button id="roastBtn">🔥 roast me</button>
+    </div>
+
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    const btn = document.getElementById("roastBtn");
+    const input = document.getElementById("address");
+    const resultDiv = document.getElementById("result");
+
+    btn.addEventListener("click", async () => {
+      const address = input.value.trim();
+      if (!address) return;
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> cooking...';
+      resultDiv.classList.remove("visible", "error");
+      resultDiv.textContent = "";
+
+      try {
+        const res = await fetch("/api/roast", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ address }),
+        });
+        const json = await res.json();
+
+        if (json.success && json.data) {
+          resultDiv.className = "result visible";
+          resultDiv.innerHTML = `<p>${json.data.roast}</p><p class="addr">${json.data.address}</p>`;
+        } else {
+          resultDiv.className = "result visible error";
+          resultDiv.textContent = json.error || "something went wrong";
+        }
+      } catch {
+        resultDiv.className = "result visible error";
+        resultDiv.textContent = "Network error — make sure the server is running";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "🔥 roast me";
+      }
+    });
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") btn.click();
+    });
+  </script>
+</body>
+</html>
