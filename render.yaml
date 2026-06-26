@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: degen-goon
+    runtime: node
+    repo: https://github.com/anukulKun/degen-goon
+    branch: main
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 18
+      - key: GROQ_API_KEY
+        sync: false
+      - key: CROO_API_URL
+        value: https://api.croo.network
+      - key: CROO_WS_URL
+        value: wss://api.croo.network/ws
+      - key: CROO_SDK_KEY
+        sync: false
+      - key: PORT
+        value: 10000

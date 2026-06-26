@@ -181,6 +181,42 @@ This fires a negotiation against your locally running provider using the `CROO_S
 
 ---
 
+## Deploy on Render
+
+One-click via Blueprint (or manual setup):
+
+### Option A — Blueprint (auto)
+
+Push to GitHub, then in Render dashboard click **New → Blueprint** and connect your repo. Render reads `render.yaml` and provisions everything automatically.
+
+### Option B — Manual Web Service
+
+1. In Render dashboard: **New Web Service** → connect your GitHub repo
+2. Set these values:
+
+| Field | Value |
+|---|---|
+| **Name** | `degen-goon` |
+| **Runtime** | Node |
+| **Build Command** | `npm install && npm run build` |
+| **Start Command** | `npm start` |
+| **Health Check Path** | `/api/health` |
+
+3. Add environment variables (secrets marked 🔒):
+
+| Variable | Value |
+|---|---|
+| `NODE_VERSION` | `18` |
+| `GROQ_API_KEY` | 🔒 your Groq key |
+| `CROO_API_URL` | `https://api.croo.network` |
+| `CROO_WS_URL` | `wss://api.croo.network/ws` |
+| `CROO_SDK_KEY` | 🔒 your provider SDK key |
+| `PORT` | `10000` (Render sets this automatically) |
+
+4. Deploy. Render runs `npm run build && npm start`, and the provider WebSocket connects on boot.
+
+---
+
 ## Environment Variables
 
 | Variable | Required | Description |
@@ -207,7 +243,8 @@ degen-goon/
 ├── public/                  # Static demo UI
 ├── .env.example             # Template with all env vars
 ├── railway.json             # Railway deployment config
-├── Procfile                 # Railway process definition
+├── render.yaml              # Render Blueprint deployment config
+├── Procfile                 # Railway / Render process definition
 ├── package.json
 ├── tsconfig.json
 └── README.md
