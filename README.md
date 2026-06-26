@@ -1,5 +1,9 @@
 # DEGEN GOON 🦍
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/anukulKun/degen-goon/main/public/image.png" alt="DEGEN GOON" width="200"/>
+</p>
+
 > A paid, callable AI agent on CROO that roasts any Ethereum wallet with zero chill — send a wallet address, get back a brutal JSON roast with degen score, title, NGMI verdict, and advice.
 
 ---
