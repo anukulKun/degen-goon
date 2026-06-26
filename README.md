@@ -1,23 +1,9 @@
 # DEGEN GOON 🦍
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/anukulKun/degen-goon/main/public/image.png" alt="DEGEN GOON" width="200"/>
-</p>
 
-> A paid, callable AI agent on CROO that roasts any Ethereum wallet with zero chill — send a wallet address, get back a brutal JSON roast with degen score, title, NGMI verdict, and advice.
+  <img src="public/image.png" alt="DEGEN GOON" />
 
----
-
-## Hackathon
-
-Submitted to the **CROO Agent Hackathon** on **DoraHacks** across two tracks:
-
-| Track | Why |
-|---|---|
-| **Creator & Content Ops Agents** | DEGEN GOON is a content agent — it takes a wallet address and produces a creative, personality-driven roast on demand. |
-| **Open A2A Agents** | Full CROO Agent Protocol (CAP) integration — negotiate, pay, deliver, and settle entirely on-chain via USDC on Base. Any agent can call DEGEN GOON as a dependency. |
-
----
+A paid, callable AI agent on CROO that roasts any Ethereum wallet with zero chill — send a wallet address, get back a brutal JSON roast with degen score, title, NGMI verdict, and advice.
 
 ## What It Does
 
@@ -38,8 +24,6 @@ Submitted to the **CROO Agent Hackathon** on **DoraHacks** across two tracks:
 4. The result is delivered on-chain via CAP and the buyer gets it through `getDelivery()`.
 
 No API keys exposed to buyers. No centralized payment rails. Pure A2A commerce.
-
----
 
 ## Live on CROO Agent Store
 
@@ -78,8 +62,6 @@ const delivery = await client.getDelivery(orderId);
 const roast = JSON.parse(delivery.deliverableSchema);
 ```
 
----
-
 ## Tech Stack
 
 | Layer | Tech |
@@ -91,8 +73,6 @@ const roast = JSON.parse(delivery.deliverableSchema);
 | Settlement | USDC on Base mainnet via CAPVault escrow |
 | Identity | CROO Agent DID + AA Wallet (auto-created on registration) |
 | Deployment | Railway (Nixpacks) |
-
----
 
 ## CAP Integration — Full Order Lifecycle
 
@@ -114,8 +94,6 @@ Requester (buyer)                     DEGEN GOON (provider)
       │   → { roast, degenScore, ... }           ├─ USDC settlement received ✓
       ▼                                          ▼
 ```
-
----
 
 ## Architecture
 
@@ -146,8 +124,6 @@ Requester (buyer)                     DEGEN GOON (provider)
   │  result      │
   └──────────────┘
 ```
-
----
 
 ## How to Run Locally
 
@@ -183,8 +159,6 @@ npx ts-node src/test-requester.ts
 
 This fires a negotiation against your locally running provider using the `CROO_SDK_KEY_REQUESTER` key. The full lifecycle runs: negotiate → pay → receive roast → exit.
 
----
-
 ## Deploy on Render
 
 One-click via Blueprint (or manual setup):
@@ -219,8 +193,6 @@ Push to GitHub, then in Render dashboard click **New → Blueprint** and connect
 
 4. Deploy. Render runs `npm run build && npm start`, and the provider WebSocket connects on boot.
 
----
-
 ## Environment Variables
 
 | Variable | Required | Description |
@@ -232,8 +204,6 @@ Push to GitHub, then in Render dashboard click **New → Blueprint** and connect
 | `CROO_SDK_KEY_REQUESTER` | For testing | Requester SDK key used by `test-requester.ts` to simulate a buyer |
 | `CROO_SERVICE_ID` | For testing | Service UUID — `fc956a4b-ad98-44b2-a206-381e973d5af3` |
 | `PORT` | No (default 3000) | Express server port |
-
----
 
 ## Project Structure
 
@@ -253,24 +223,6 @@ degen-goon/
 ├── tsconfig.json
 └── README.md
 ```
-
----
-
-## What's Done
-
-- [x] AI roast engine via Groq API
-- [x] Structured JSON output — `roast`, `degenScore`, `degenTitle`, `ngmiVerdict`, `advice`
-- [x] Hardcoded `FALLBACK_ROAST` for Groq downtime
-- [x] CAP provider WebSocket listener — `provider.ts`
-- [x] Accept negotiations via `acceptNegotiation()`
-- [x] Process paid orders — extract wallet, call Groq, `deliverOrder()`
-- [x] One-shot test requester — `test-requester.ts`
-- [x] Express server with manual roast UI
-- [x] Deployed on Railway (Nixpacks)
-- [x] Listed on CROO Agent Store (Service ID: `fc956a4b-ad98-44b2-a206-381e973d5af3`)
-
----
-
 ## License
 
 MIT — see [LICENSE](LICENSE) for details.
